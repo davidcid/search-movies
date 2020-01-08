@@ -7,23 +7,33 @@ import "./App.css";
 import "bulma/css/bulma.css";
 
 class App extends Component {
-  state = { results: [] };
+  state = { usedSearch: false, results: [] };
 
-  _handeResults = results => {
-    this.setState({ results });
+  _handleResults = results => {
+    this.setState({ results, usedSearch: true });
   };
+
+  _renderResults() {
+    return this.state.results.length === 0 ? (
+      <p>
+        Sorry! <span>😟</span> Results not found
+      </p>
+    ) : (
+      <MoviesList movies={this.state.results} />
+    );
+  }
 
   render() {
     return (
       <div className="App">
         <Title>Search Movies</Title>
         <div className="SearchForm-wrapper">
-          <SearchForm onResults={this._handeResults} />
+          <SearchForm onResults={this._handleResults} />
         </div>
-        {this.state.results.length === 0 ? (
-          <p>Sin resultados</p>
+        {this.state.usedSearch ? (
+          this._renderResults()
         ) : (
-          <MoviesList movies={this.state.results} />
+          <small>Use the form to search a movie</small>
         )}
       </div>
     );
